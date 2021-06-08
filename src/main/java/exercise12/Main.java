@@ -1,9 +1,6 @@
 package exercise12;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Predicate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -16,7 +13,7 @@ public class Main {
 //    d) uzyskaj listę wszystkich nazwisk osób, które są w przedziale wiekowym: 15-19 ​(filter)
 //    e)* uzyskaj sumę wieku wszystkich osób ​(sum)
 //    f)* uzyskaj średnią wieku wszystkich mężczyzn ​(average)
-//    g)** znajdź nastarszą osobę w liście ​(findFirst)
+//    g)** znajdź nastarszą osobę w liście
 
     //2. Stwórz klasę Programmer, która ma klasę Person jako pole. Poza tym, posiada listę
     //języków, którymi się posługuje. Mogą być one reprezentowane przez klasę String.
@@ -30,26 +27,6 @@ public class Main {
     //g) uzyskaj listę nazwisk programistów, którzy znają więcej, niż dwa języki
     //h) sprawdź, czy istnieje chociaż jedna osoba, która nie zna żadnego języka
     //i)* uzyskaj ilość wszystkich języków opanowanych przez programistki
-    //3*.Używając streamów znajdź długość najdłuższej linii w wybranym przez ciebie pliku.
-    //Zauważ, że klasa BufferedReader ma metodę stream().
-    //4*. Zamien poniższy kod:
-    //List<Album> favs = new ArrayList<>();
-    //for (Album a : albums) {
-    //boolean hasFavorite = false;
-    //for (Track t : a.tracks) {
-    //if (t.rating >= 4) {
-    //hasFavorite = true;
-    //break;
-    //}
-    //}if
-    //(hasFavorite)
-    //favs.add(a);
-    //}C
-    //ollections.sort(favs, new Comparator<Album>() {
-    //public int compare(Album a1, Album a2) {
-    //return a1.name.compareTo(a2.name);
-    //}});
-    //..na kod z wykorzystaniem streamów.
 
 
     public static void main(String[] args) {
@@ -62,6 +39,7 @@ public class Main {
         Person person7 = new Person("Stary", "Pan", 80, true);
         Person person8 = new Person("Newbie", "Noob", 12, true);
         Person person9 = new Person("Newbies", "Sister", 19, false);
+        List<Person> people = (Arrays.asList(person1, person2, person3, person4, person5, person6, person7, person8, person9));
         List<String> languages1 = Arrays.asList("Java;Cobol;Cpp;Lisp".split(";"));
         List<String> languages2 = Arrays.asList("Java;Lisp".split(";"));
         List<String> languages3 = Arrays.asList("Java;Cobol;Cpp;Lisp;C#".split(";"));
@@ -70,7 +48,7 @@ public class Main {
         List<String> languages6 = Arrays.asList("Java;Scala".split(";"));
         List<String> languages7 = Arrays.asList("C#;C".split(";"));
         List<String> languages8 = Collections.emptyList();
-        List<String> languages9 = Arrays.asList("Java");
+        List<String> languages9 = Arrays.asList("Java;Python".split(";"));
         Programmer programmer1 = new Programmer(person1, languages1);
         Programmer programmer2 = new Programmer(person2, languages2);
         Programmer programmer3 = new Programmer(person3, languages3);
@@ -84,6 +62,101 @@ public class Main {
                 Arrays.asList(programmer1, programmer2, programmer3, programmer4,
                         programmer5, programmer6, programmer7, programmer8, programmer9);
         System.out.println(programmers);
+
+        // 2a
+        System.out.println(getMenFromProgrammers(programmers));
+
+        System.out.println();
+
+        // 1a
+        System.out.println(getMenFromPeople(people));
+
+        System.out.println();
+
+        //1b
+        System.out.println(getAdultWomenFromPeople(people));
+
+        System.out.println();
+
+        //1c
+        if (getAdultJacek(people).isPresent()) {
+            System.out.println(getAdultJacek(people));
+        }
+
+        System.out.println();
+
+        //1d
+        System.out.println(getSurnamesOfPeopleBetween15And19(people));
+
+        System.out.println();
+
+        //1e
+        System.out.println(getSumOfAgeOfAll(people));
+
+        System.out.println();
+
+        //1f
+        if (getAvgOfAgeOfAllMen(people).isPresent()) {
+            Double average = getAvgOfAgeOfAllMen(people).getAsDouble();
+            System.out.println(average);
+        }
+
+        System.out.println();
+
+        //1g
+        if (getTheOldestPerson(people).isPresent()) {
+            System.out.println(getTheOldestPerson(people).get());
+        } else {
+            System.out.println("No people.");
+        }        System.out.println();
+
+        //2a
+        System.out.println(getMenFromProgrammers1(programmers));
+
+        System.out.println();
+
+        //2b
+        System.out.println(getNotAdultsKnowingCobolFromProgrammers(programmers));
+
+        System.out.println();
+
+        //2c
+        System.out.println(getProgrammersKnowingMoreThanOneLanguage(programmers));
+
+        System.out.println();
+
+        //2d
+        System.out.println(getProgrammersFemaleKnowingJavaAndCpp(programmers));
+
+        System.out.println();
+
+        //2e
+        System.out.println(getProgrammersMaleNames(programmers));
+
+        System.out.println();
+
+        //2f
+        System.out.println(getAllLanguages(programmers));
+
+        System.out.println();
+
+        //2g
+        System.out.println(getSurnamesMoreThanTwoLanguages(programmers));
+
+        System.out.println();
+
+        //2h
+        Optional<Programmer> personNotKnowingAnyLanguage = getPersonNotKnowingAnyLanguage(programmers);
+        if (isPresent(personNotKnowingAnyLanguage)) {
+            System.out.println("There is a person not knowing any language");
+        } else {
+            System.out.println("There is no person not knowing any language");
+        }
+
+        System.out.println();
+
+        //2i
+        System.out.println(getNumberOfAllLanguagesFemaleProgrammers(programmers));
     }
 
 //    public List<Programmer> getMenFromProgrammers(List<Programmer> programmers) {
@@ -99,10 +172,134 @@ public class Main {
 
     // alt + enter after new Predicate<Programmer> converts to lambda
 
-    public List<Programmer> getMenFromProgrammers(List<Programmer> programmers) {
+    public static List<Programmer> getMenFromProgrammers(List<Programmer> programmers) {
         List<Programmer> programmersMen = programmers.stream()
                 .filter(programmer -> programmer.getPerson().isMale())
                 .collect(Collectors.toList());
         return programmersMen;
+    }
+
+    public static List<Person> getMenFromPeople(List<Person> people) {
+        List<Person> peopleMen = people.stream()
+                .filter(person -> person.isMale())
+                .collect(Collectors.toList());
+        return peopleMen;
+    }
+
+    public static List<Person> getAdultWomenFromPeople(List<Person> people) {
+        List<Person> peopleAdultWomen = people.stream()
+                .filter(person -> !person.isMale() && person.getAge() >= 18)
+                .collect(Collectors.toList());
+        return peopleAdultWomen;
+    }
+
+    public static Optional<Person> getAdultJacek(List<Person> people) {
+        Optional<Person> jacek = people.stream()
+                .filter(person -> person.getFirstName().equals("Jacek") && person.getAge() >= 18)
+                .findFirst();
+        return jacek;
+    }
+
+    public static List<String> getSurnamesOfPeopleBetween15And19(List<Person> people) {
+        return people.stream()
+                .filter(person -> person.getAge() >= 15 && person.getAge() <= 19)
+                .map(person -> person.getLastName())
+                .collect(Collectors.toList());
+    }
+
+    public static Integer getSumOfAgeOfAll(List<Person> people) {
+        int sum = people.stream()
+                .mapToInt(person -> person.getAge())
+                .sum();
+        return sum;
+    }
+
+    public static OptionalDouble getAvgOfAgeOfAllMen(List<Person> people) {
+        OptionalDouble average = people.stream()
+                .filter(person -> person.isMale())
+                .mapToInt(person -> person.getAge())
+                .average();
+        return average;
+    }
+
+    public static Optional<Person> getTheOldestPerson(List<Person> people) {
+        Optional<Person> theOldestPerson = people.stream()
+                .reduce((p1, p2) -> p1.getAge() > p2.getAge() ? p1 : p2);
+
+        return theOldestPerson;
+    }
+
+    public static List<Programmer> getMenFromProgrammers1(List<Programmer> programmers) {
+        List<Programmer> programmersMen = programmers.stream()
+                .filter(programmer -> programmer.getPerson().isMale())
+                .collect(Collectors.toList());
+        return programmersMen;
+    }
+
+    public static List<Programmer> getNotAdultsKnowingCobolFromProgrammers(List<Programmer> programmers) {
+        return programmers.stream()
+                .filter(programmer -> programmer.getPerson().getAge() < 18 && programmer.getLanguages().contains("Cobol"))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Programmer> getProgrammersKnowingMoreThanOneLanguage(List<Programmer> programmers) {
+        return programmers.stream()
+                .filter(programmer -> programmer.getLanguages().size() > 1)
+                .collect(Collectors.toList());
+    }
+
+    public static List<Programmer> getProgrammersFemaleKnowingJavaAndCpp(List<Programmer> programmers) {
+        return programmers.stream()
+                .filter(programmer -> !programmer.getPerson().isMale())
+                .filter(programmer -> programmer.getLanguages().contains("Java") && programmer.getLanguages().contains("Cpp"))
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> getProgrammersMaleNames(List<Programmer> programmers) {
+        return programmers.stream()
+                .filter(programmer -> programmer.getPerson().isMale())
+                .map(programmer -> programmer.getPerson().getFirstName())
+                .collect(Collectors.toList());
+    }
+
+    public static Set<String> getAllLanguages(List<Programmer> programmers) {
+        Set<String> set = programmers.stream()
+                .map(programmer -> programmer.getLanguages())
+                .flatMap(strings -> strings.stream())
+                .collect(Collectors.toSet());
+        return set;
+    }
+
+    public static List<String> getSurnamesMoreThanTwoLanguages(List<Programmer> programmers) {
+        return programmers.stream()
+                .filter(programmer -> programmer.getLanguages().size() > 2)
+                .map(programmer -> programmer.getPerson().getLastName())
+                .collect(Collectors.toList());
+    }
+
+    public static Optional<Programmer> getPersonNotKnowingAnyLanguage(List<Programmer> programmers) {
+        Optional<Programmer> personNotKnowing = programmers.stream()
+                .filter(programmer -> !(programmer.getLanguages().size() > 0))
+                .findAny();
+        return personNotKnowing;
+    }
+
+    public static boolean isPresent(Optional<Programmer> personNotKnowing) {
+        if (personNotKnowing.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static Integer getNumberOfAllLanguagesFemaleProgrammers(List<Programmer> programmers) {
+        Set<String> set = programmers.stream()
+                .filter(programmer -> !programmer.getPerson().isMale())
+                .map(programmer -> programmer.getLanguages())
+                .flatMap(strings -> strings.stream())
+                .collect(Collectors.toSet());
+        Integer numberOfLanguages = set.size();
+
+        return numberOfLanguages;
     }
 }
